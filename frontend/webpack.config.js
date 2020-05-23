@@ -17,6 +17,10 @@ module.exports = {
                 use: ["source-map-loader"],
                 enforce: "pre",
             },
+            {
+                test: /\.css$/i,
+                use: ["style-loader", "css-loader"],
+            },
         ],
     },
     resolve: {
@@ -28,6 +32,9 @@ module.exports = {
         publicPath: "/",
         filename: "index.js",
     },
-    plugins: [new webpack.HotModuleReplacementPlugin(), new HtmlWebpackPlugin({})],
+    plugins: [
+        new webpack.HotModuleReplacementPlugin(),
+        new HtmlWebpackPlugin({ template: path.join(__dirname, "src/index.html") }),
+    ],
     devtool: "source-map",
 };

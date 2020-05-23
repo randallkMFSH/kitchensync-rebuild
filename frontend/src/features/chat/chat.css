@@ -1,0 +1,30 @@
+.chat {
+    display: grid;
+    grid-template-rows: 1fr min-content;
+    grid-template-columns: min-content 1fr;
+    grid-template-areas:
+        "log log"
+        "name messageInput";
+}
+
+.chatInput {
+    grid-area: messageInput;
+}
+.myUsername {
+    grid-area: name;
+    margin-right: 0.5em;
+}
+.chatLog {
+    grid-area: log;
+}
+
+.message {
+    display: flex;
+    flex-direction: row;
+}
+.message .sender {
+    font-weight: bold;
+    margin-right: 0.5rem;
+}
+.message .messageContents {
+}

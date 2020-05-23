@@ -5,5 +5,6 @@ register({
     baseUrl: __dirname,
     paths: {
         "@*": ["*"],
+        "!common*": ["../../common/*"],
     },
 });
