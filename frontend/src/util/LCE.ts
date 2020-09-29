@@ -1,6 +1,6 @@
 export type VALID_CONTENT = null | object | boolean | number | string;
 export type PREVIOUS_CONTENT<T extends VALID_CONTENT> = Readonly<{
-    previousContent?: CONTENT<T>;
+    previousContent?: T;
 }>;
 
 export type NOT_REQUESTED<T extends VALID_CONTENT> = Readonly<{ notRequested: true }>;
@@ -30,18 +30,13 @@ export function lceNotRequested<T extends VALID_CONTENT>(): NOT_REQUESTED<T> {
 
 /**
  * Returns an instance of @type LOADING, with optional previousState.
- * @param previousState Optional LCE value for previous state. Any previous content value will be carried through.
+ * @param previousState Optional value for previous content.
  */
-export function lceLoading<T extends VALID_CONTENT>(previousState?: LCE<T>): LOADING<T> {
-    if (previousState && isContent<T>(previousState)) {
+export function lceLoading<T extends VALID_CONTENT>(previousState?: T): LOADING<T> {
+    if (previousState !== undefined) {
         return {
             loading: true,
             previousContent: previousState,
-        };
-    } else if (previousState && "previousContent" in previousState) {
-        return {
-            loading: true,
-            previousContent: previousState.previousContent,
         };
     } else {
         return {
@@ -63,18 +58,13 @@ export function lceContent<T extends VALID_CONTENT>(data: T): CONTENT<T> {
 /**
  * Returns an instance of @type ERROR.
  * @param error The error associated with fetching/hydrating the data.
- * @param previousState Optional previous state. Any previous content value will be carried through.
+ * @param previousState Optional value for previous content.
  */
-export function lceError<T extends VALID_CONTENT>(error: Error, previousState?: LCE<T>): ERROR<T> {
-    if (previousState && isContent<T>(previousState)) {
+export function lceError<T extends VALID_CONTENT>(error: Error, previousState?: T): ERROR<T> {
+    if (previousState !== undefined) {
         return {
             error,
             previousContent: previousState,
-        };
-    } else if (previousState && "previousContent" in previousState) {
-        return {
-            error,
-            previousContent: previousState.previousContent,
         };
     } else {
         return {
@@ -112,7 +102,7 @@ export const getDataOrPrevious = <T extends VALID_CONTENT>(val: LCE<T>): T | und
     if (isContent<T>(val)) {
         return val.data;
     } else if (isError<T>(val) || isLoading<T>(val)) {
-        return val.previousContent && val.previousContent.data;
+        return val.previousContent;
     } else {
         return undefined;
     }

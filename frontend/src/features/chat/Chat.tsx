@@ -1,5 +1,5 @@
 import { UsernameInput } from "@features/user/UsernameInput";
-import React, { useRef } from "react";
+import React, { useEffect, useRef } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import "./chat.css";
 import { ChatLogMessage } from "./chatModels";
@@ -38,8 +38,29 @@ const ChatMessage = (props: ChatMessageProps) => {
 
 const ChatLog = () => {
     const log = useSelector(selectChatLog);
+    const chatLogRef = useRef<HTMLElement>(null);
+    const isCloseToBottomRef = useRef<boolean>(true);
+
+    const onScroll = () => {
+        const logContainer = chatLogRef.current;
+        if (logContainer) {
+            isCloseToBottomRef.current =
+                logContainer.scrollHeight - logContainer.offsetHeight - 50 < logContainer.scrollTop;
+        }
+    };
+
+    // If we're not scrolled up, scroll to bottom when new messages are logged
+    useEffect(() => {
+        const logContainer = chatLogRef.current;
+        if (logContainer) {
+            if (isCloseToBottomRef.current) {
+                logContainer.scrollTop = logContainer.scrollHeight;
+            }
+        }
+    }, [log.length]);
+
     return (
-        <section className="chatLog">
+        <section className="chatLog" ref={chatLogRef} onScroll={onScroll}>
             {log.map((message, index) => (
                 <ChatMessage message={message} key={index} />
             ))}

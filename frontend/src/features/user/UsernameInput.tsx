@@ -36,7 +36,7 @@ export const UsernameInput = () => {
     } else {
         const name = getDataOrPrevious(currentName);
         return (
-            <span className="myUsername" onClick={setIsEditing.bind(undefined, true)}>
+            <span className="myUsername" onClick={setIsEditing.bind(undefined, true)} title={name}>
                 {name}
             </span>
         );

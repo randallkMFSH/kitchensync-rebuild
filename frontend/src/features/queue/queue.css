@@ -1,0 +1,100 @@
+.mediaList {
+    padding-top: 1rem;
+    padding-right: 1rem;
+    padding-bottom: 1rem;
+    padding-left: 0;
+    overflow-x: auto;
+    flex-direction: row;
+    display: flex;
+    margin: 0;
+    list-style: none;
+    margin-bottom: 1rem;
+}
+.mediaList .addToQueue {
+    width: 4rem;
+    min-width: 4rem;
+    font-size: 3rem;
+}
+
+.mediaTile {
+    min-width: 8rem;
+    width: 8rem;
+    height: 4.5rem;
+    background-color: beige;
+    margin-right: 0.4rem;
+    position: relative;
+    background-size: 100%;
+    background-position: center;
+}
+.mediaTile.loading {
+    background-color: beige;
+    animation: mediaLoadingPulse 800ms infinite ease-in-out;
+}
+@keyframes mediaLoadingPulse {
+    0%,
+    100% {
+        opacity: 1;
+    }
+    50% {
+        opacity: 0.7;
+    }
+}
+.mediaTile .deleteMedia {
+    position: absolute;
+    top: 0;
+    left: 0;
+    background-color: red;
+    color: white;
+    border: 1px solid white;
+}
+.mediaTile .skipToMedia {
+    position: absolute;
+    top: 0;
+    right: 0;
+    background-color: black;
+    color: white;
+    border: 1px solid white;
+}
+.mediaTile progress {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    width: 100%;
+    appearance: none;
+    height: 5px;
+}
+.mediaTile progress::-webkit-progress-bar {
+    background-color: #858585;
+}
+.mediaTile progress::-webkit-progress-value {
+    background-color: red;
+}
+.mediaTile progress::-moz-progress-value {
+    background-color: red;
+}
+.controlPanel {
+    display: grid;
+    grid-template-columns: 1fr;
+    grid-template-rows: 1fr 1fr;
+    max-width: 30rem;
+}
+.controlPanel .error {
+    grid-row: 1;
+    color: white;
+    background-color: red;
+    padding: 0.5rem;
+}
+.controlPanel .error button {
+    background-color: transparent;
+    color: white;
+    border: none;
+    float: right;
+}
+.controlPanel input {
+    grid-row: 2;
+    height: 1.5rem;
+}
+.controlPanel button {
+    grid-row: 2;
+}

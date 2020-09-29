@@ -1,0 +1,26 @@
+.faucet {
+    grid-area: faucet;
+    display: grid;
+    position: relative;
+}
+
+.interactionPrompt {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    align-self: center;
+    justify-self: center;
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: white;
+}
+
+.interactionPrompt h1 {
+    font-size: 3rem;
+    margin-bottom: 1rem;
+    text-transform: lowercase;
+}

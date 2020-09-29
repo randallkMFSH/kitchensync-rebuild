@@ -21,6 +21,10 @@ module.exports = {
                 test: /\.css$/i,
                 use: ["style-loader", "css-loader"],
             },
+            {
+                test: /\.wav$/i,
+                use: ["file-loader"],
+            },
         ],
     },
     resolve: {
@@ -34,7 +38,7 @@ module.exports = {
     },
     plugins: [
         new webpack.HotModuleReplacementPlugin(),
-        new HtmlWebpackPlugin({ template: path.join(__dirname, "src/index.html") }),
+        new HtmlWebpackPlugin({ filename: "lobby.html", template: path.join(__dirname, "src/lobby.html") }),
     ],
     devtool: "source-map",
 };

@@ -1,0 +1,16 @@
+.memberList {
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    padding-left: 1rem;
+    overflow: auto;
+    position: relative;
+    word-wrap: break-word;
+}
+
+.memberList .host:before {
+    content: "★";
+    position: absolute;
+    left: 0.25rem;
+    font-size: 0.75rem;
+}

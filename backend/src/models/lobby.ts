@@ -1,4 +1,4 @@
-import { FaucetType } from "./faucet";
+import { FaucetType } from "@common/apiModels";
 
 export interface Lobby {
     id: string;
@@ -8,8 +8,11 @@ export interface Lobby {
 }
 
 export interface MediaObject {
-    lobby_id: string;
     url: string;
     faucet_type: FaucetType;
-    list_position: number;
+    guid: string;
+    start_time: number;
+    duration?: number;
+    image_url?: string;
+    title?: string;
 }

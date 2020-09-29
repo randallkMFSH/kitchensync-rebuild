@@ -12,10 +12,11 @@ lobbyRouter.use(makeWebsocketMiddleware());
 
 const lobbyInstances = new Map<string, LobbyInstance>();
 
-const getOrCreateLobby = (lobbyData: Lobby) => {
+const getOrCreateLobby = async (lobbyData: Lobby) => {
     let lobby = lobbyInstances.get(lobbyData.id);
     if (!lobby) {
         lobby = new LobbyInstance(lobbyData);
+        await lobby.loadQueue();
         lobbyInstances.set(lobbyData.id, lobby);
     }
     return lobby;
@@ -28,29 +29,38 @@ lobbyRouter.get("/:id", async (ctx: ContextWithWebsocket, next) => {
         return;
     }
 
-    const lobby = getOrCreateLobby(lobbyData);
+    const lobby = await getOrCreateLobby(lobbyData);
 
     if (ctx.ws) {
         const socket = await ctx.ws();
         lobby.attachListeners(socket);
 
-        socket.on("close", (code, reason) => {
+        socket.on("close", (code) => {
             console.log(`Client disconnected with code ${code}`);
 
             lobby.removeMember(socket);
             if (lobby.members.length === 0) {
                 if (lobby.data.persist) {
+                    lobby.pause(undefined);
                     lobby.save();
+                } else {
+                    lobby.delete();
                 }
 
                 lobbyInstances.delete(lobby.data.id);
             }
         });
+        ctx.status = 200;
     } else {
         const response: LobbyData = {
             host: lobby.host && lobby.memberMetadata.get(lobby.host)?.name,
             chatLog: await getChatLogForLobby(lobbyData.id),
             members: lobby.members.map((member) => lobby.memberMetadata.get(member)!.name),
+            title: lobby.data.title || lobby.data.id,
+            persist: lobby.data.persist,
+            queue: lobby.queue,
+            paused: lobby.paused,
+            playback_position: lobby.getPlaybackPosition(),
         };
 
         ctx.body = response;

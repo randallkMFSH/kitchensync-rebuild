@@ -24,5 +24,5 @@ app.use(staticMiddleware("static/", { extensions: ["html"] }));
 
 app.use(rootRouter.routes());
 
-console.log("Starting server on 8080");
+console.log("Starting server on http://127.0.0.1:8080");
 app.listen(8080);

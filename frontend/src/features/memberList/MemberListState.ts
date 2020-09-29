@@ -13,5 +13,8 @@ export const MemberListState = createSlice({
         promotion(state, action: PayloadAction<string>) {
             state.host = action.payload;
         },
+        promoteOtherUser(state, action: PayloadAction<string>) {
+            state.host = action.payload;
+        },
     },
 });

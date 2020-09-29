@@ -1,0 +1,17 @@
+.lobbyInfo {
+    grid-area: memberList;
+    padding-left: 1rem;
+    display: flex;
+    flex-direction: column;
+}
+
+h1.title {
+    font-size: 2rem;
+    margin-top: 1rem;
+    margin-bottom: 1rem;
+}
+.title input {
+    font-size: 2rem;
+    margin-top: 1rem;
+    margin-bottom: 1rem;
+}

@@ -1,21 +1,35 @@
 .chat {
     display: grid;
     grid-template-rows: 1fr min-content;
-    grid-template-columns: min-content 1fr;
+    grid-template-columns: fit-content(50%) 1fr;
     grid-template-areas:
         "log log"
         "name messageInput";
+    grid-area: chat;
+    overflow: hidden;
 }
 
 .chatInput {
     grid-area: messageInput;
+    display: flex;
+}
+.chatInput input {
+    flex-grow: 1;
 }
 .myUsername {
     grid-area: name;
     margin-right: 0.5em;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    overflow: hidden;
+    padding-left: 0.4rem;
 }
 .chatLog {
     grid-area: log;
+    overflow-y: auto;
+    overflow-x: hidden;
+    word-break: break-word;
+    padding-left: 1rem;
 }
 
 .message {
@@ -25,6 +39,7 @@
 .message .sender {
     font-weight: bold;
     margin-right: 0.5rem;
+    flex-shrink: 0;
 }
 .message .messageContents {
 }

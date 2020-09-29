@@ -7,17 +7,17 @@ export const rootRouter = new Router();
 
 rootRouter.use("/api", apiRouter.routes(), apiRouter.allowedMethods());
 
-rootRouter.get("/lobby/create", async (ctx) => {
+rootRouter.get("/create", async (ctx) => {
     const lobby = await createLobby();
     ctx.redirect(lobby.id);
 });
 
-rootRouter.get("/lobby/:id", async (ctx, next) => {
+rootRouter.get("/:id", async (ctx, next) => {
     const lobby = await getLobbyFromDatabaseById(ctx.params.id);
     if (!lobby) {
         ctx.status = 404;
         return;
     }
 
-    return send(ctx, "static/build/index.html");
+    return send(ctx, "static/build/lobby.html");
 });
