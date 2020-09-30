@@ -10,7 +10,7 @@
         "dev:frontend": "webpack --config ./frontend/webpack.config.js --mode development --watch",
         "dev": "npm run dev:backend & npm run dev:frontend",
         "start": "node -r ./backend/dist/bootstrap.js backend/dist/main.js",
-        "postinstall": "npm run build:backend && npm run build:frontend"
+        "build": "npm run build:backend && npm run build:frontend"
     },
     "repository": {
         "type": "git",

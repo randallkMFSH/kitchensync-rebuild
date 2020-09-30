@@ -5,7 +5,9 @@ const id = location.pathname.split("/")[1];
 
 const host = location.host;
 
-const socket = new WebSocket(`ws://${host}/api/lobby/${id}`);
+const websocketProtocol = location.protocol === "http:" ? "ws" : "wss";
+
+const socket = new WebSocket(`${websocketProtocol}://${host}/api/lobby/${id}`);
 
 export const sendLobbyMessage = (message: LobbyMessage) => {
     const stringified = JSON.stringify(message);
