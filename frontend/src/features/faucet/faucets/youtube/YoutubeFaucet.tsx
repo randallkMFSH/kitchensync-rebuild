@@ -60,7 +60,7 @@ const YoutubeController = ({
     }
 
     useEffect(() => {
-        console.log("should be paused? ", shouldBePaused, player);
+        console.log("should be paused? ", shouldBePaused);
         if (shouldBePaused) {
             player.pauseVideo();
         } else {
@@ -72,12 +72,14 @@ const YoutubeController = ({
             userInteractionMetadata.justSeeked = false;
             return;
         }
-        console.log("lost but seeking");
-        player.seekTo(lastSeekTarget, true);
-        if (shouldBePaused) {
-            player.pauseVideo();
+        const currentTime = player.getCurrentTime();
+        const estimatedCorrectTime = lastSeekTarget + (Date.now() - lastUpdateTime) / 1000;
+        const diff = Math.abs(currentTime - estimatedCorrectTime);
+        if (diff > 0.2) {
+            console.log("lost but seeking");
+            player.seekTo(estimatedCorrectTime, true);
         }
-    }, [lastSeekTarget, shouldBePaused]);
+    }, [lastSeekTarget, lastUpdateTime]);
 
     const dispatch = useDispatch();
 
@@ -88,7 +90,7 @@ const YoutubeController = ({
             animationFrameHandle = requestAnimationFrame(update);
             const currentTime = player.getCurrentTime();
             const diff = Math.abs(currentTime - lastFrameTime);
-            if (diff > 1.5) {
+            if (diff > 0.8) {
                 userInteractionMetadata.justSeeked = true;
                 FaucetControl.seek(currentTime);
                 dispatch(FaucetState.actions.seek(currentTime));
@@ -118,13 +120,17 @@ const YoutubeController = ({
     }, [shouldBePaused, lastSeekTarget, lastUpdateTime]);
 
     youtubeCallbacksRef.current.onPlay = () => {
-        FaucetControl.play(player.getCurrentTime());
-        dispatch(FaucetState.actions.play());
+        if (isCurrentUserHost) {
+            FaucetControl.play(player.getCurrentTime());
+            dispatch(FaucetState.actions.play(player.getCurrentTime()));
+        }
     };
 
     youtubeCallbacksRef.current.onPause = () => {
-        FaucetControl.pause(player.getCurrentTime());
-        dispatch(FaucetState.actions.pause());
+        if (isCurrentUserHost) {
+            FaucetControl.pause(player.getCurrentTime());
+            dispatch(FaucetState.actions.pause(player.getCurrentTime()));
+        }
     };
 
     youtubeCallbacksRef.current.onStateChange = (state) => {
@@ -139,9 +145,10 @@ const YoutubeController = ({
             case YT.PlayerState.PAUSED:
                 if (!isCurrentUserHost) {
                     if (shouldBePaused) {
+                        console.log("state changed to playing, but should be paused");
                         player.pauseVideo();
-                    }
-                    if (!shouldBePaused) {
+                    } else {
+                        console.log("state changed to paused, but should be playing");
                         player.playVideo();
                     }
                 }
@@ -170,6 +177,7 @@ const YoutubeController = ({
             case YT.PlayerState.PLAYING:
                 if (!isCurrentUserHost) {
                     if (shouldBePaused) {
+                        console.log("was playing, should be paused");
                         player.pauseVideo();
                     }
                 }
@@ -178,6 +186,7 @@ const YoutubeController = ({
             case YT.PlayerState.PAUSED:
                 if (!isCurrentUserHost) {
                     if (!shouldBePaused) {
+                        console.log("was paused, should be playing");
                         player.playVideo();
                     }
                 }
@@ -239,7 +248,6 @@ export const YoutubeFaucet = () => {
                         playsinline: 1,
                         modestbranding: 1,
                         cc_load_policy: 1,
-                        autoplay: 1,
                     },
                 }}
             />
