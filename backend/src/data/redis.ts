@@ -1,7 +1,24 @@
 import { Lobby } from "@models/lobby";
 import { createHandyClient } from "handy-redis";
+import { ClientOpts } from "redis";
 
-export const redis = createHandyClient();
+let opts: ClientOpts = {};
+if (process.env.REDIS_KEY) {
+    if (!process.env.REDIS_HOST) {
+        throw "Missing REDIS_HOST environment variable";
+    }
+    if (!process.env.REDIS_PORT) {
+        throw "Missing REDIS_PORT environment variable";
+    }
+    opts = {
+        host: process.env.REDIS_HOST,
+        port: parseInt(process.env.REDIS_PORT),
+        auth_pass: process.env.REDIS_KEY,
+        tls: { servername: process.env.REDIS_HOST },
+    };
+}
+
+export const redis = createHandyClient(opts);
 
 export enum Sets {
     Lobbies = "lobbies",
