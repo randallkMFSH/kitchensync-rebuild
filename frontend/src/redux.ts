@@ -11,7 +11,6 @@ import { QueueState } from "@features/queue/QueueState";
 import { userSaga } from "@features/user/userSaga";
 import { UserState } from "@features/user/UserState";
 import { combineReducers, configureStore, getDefaultMiddleware } from "@reduxjs/toolkit";
-import { routerMiddleware } from "connected-react-router";
 import createSagaMiddleware from "redux-saga";
 
 const rootReducer = combineReducers({
@@ -27,11 +26,7 @@ const sagaMiddleware = createSagaMiddleware();
 
 export const store = configureStore({
     reducer: rootReducer,
-    middleware: [
-        ...getDefaultMiddleware({ thunk: false, serializableCheck: false }),
-        routerMiddleware(history),
-        sagaMiddleware,
-    ],
+    middleware: [...getDefaultMiddleware({ thunk: false, serializableCheck: false }), sagaMiddleware],
 });
 
 const sagas = [chatSaga, userSaga, connectionSaga, lobbyInfoSaga, queueSaga, faucetSaga];
