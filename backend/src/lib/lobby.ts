@@ -205,6 +205,10 @@ export class LobbyInstance {
                 if (this.queue.length > 1) {
                     const newQueue = [...this.queue.slice(1)];
                     this.setQueue(newQueue);
+                    this.play(undefined);
+                    if (this.host) {
+                        this.send(this.host, { type: MessageType.PLAY, seconds: undefined });
+                    }
                 } else {
                     this.pause(undefined);
                 }

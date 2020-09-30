@@ -68,6 +68,12 @@ export const HTML5Faucet = () => {
         }
     }, [isCurrentUserHost]);
 
+    const onEnded = useCallback(() => {
+        if (isCurrentUserHost) {
+            FaucetControl.ended();
+        }
+    }, [isCurrentUserHost]);
+
     useAnimationFrame(() => {
         if (isCurrentUserHost) {
             return;
@@ -102,5 +108,6 @@ export const HTML5Faucet = () => {
         onPlay,
         onPause,
         onSeeking,
+        onEnded,
     });
 };
