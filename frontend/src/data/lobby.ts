@@ -8,7 +8,9 @@ const host = location.host;
 const socket = new WebSocket(`ws://${host}/api/lobby/${id}`);
 
 export const sendLobbyMessage = (message: LobbyMessage) => {
-    socket.send(JSON.stringify(message));
+    const stringified = JSON.stringify(message);
+    console.log("->", stringified);
+    socket.send(stringified);
 };
 
 export const onConnected = (connected: (websocket: WebSocket) => void) => {

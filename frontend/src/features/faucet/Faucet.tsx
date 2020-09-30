@@ -5,6 +5,7 @@ import { selectIsCurrentUserHost } from "@features/memberList/memberListSelector
 import React from "react";
 import { useDispatch, useSelector } from "react-redux";
 import "./faucet.css";
+import { HTML5Faucet } from "./faucets/html5/HTML5Faucet";
 import { NoFaucet } from "./faucets/none/NoFaucet";
 import { YoutubeFaucet } from "./faucets/youtube/YoutubeFaucet";
 import { selectCurrentFaucetType, selectNeedsInteractionForPlayback, selectShouldShowLoading } from "./faucetSelectors";
@@ -24,6 +25,9 @@ const getFaucetComponent = (faucet_type: FaucetType | undefined) => {
     switch (faucet_type) {
         case "Youtube":
             return YoutubeFaucet;
+        case "HTML5Video":
+        case "HTML5Audio":
+            return HTML5Faucet;
         case undefined:
             return NoMediaFaucet;
         default:

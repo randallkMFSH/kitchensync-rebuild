@@ -74,11 +74,10 @@ const YoutubeController = ({
         }
         console.log("lost but seeking");
         player.seekTo(lastSeekTarget, true);
-    }, [lastSeekTarget]);
-
-    useEffect(() => {
-        player.playVideo();
-    }, []);
+        if (shouldBePaused) {
+            player.pauseVideo();
+        }
+    }, [lastSeekTarget, shouldBePaused]);
 
     const dispatch = useDispatch();
 
@@ -120,10 +119,12 @@ const YoutubeController = ({
 
     youtubeCallbacksRef.current.onPlay = () => {
         FaucetControl.play(player.getCurrentTime());
+        dispatch(FaucetState.actions.play());
     };
 
     youtubeCallbacksRef.current.onPause = () => {
         FaucetControl.pause(player.getCurrentTime());
+        dispatch(FaucetState.actions.pause());
     };
 
     youtubeCallbacksRef.current.onStateChange = (state) => {

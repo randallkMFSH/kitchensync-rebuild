@@ -3,6 +3,7 @@ import { AsJSON } from "./util/convenienceTypes";
 
 export enum MessageType {
     IDENTITY = "IDENTITY",
+    WELCOME = "WELCOME",
     PROMOTION = "PROMOTION",
     BAD_NICKNAME = "BAD_NICKNAME",
     BAD_MESSAGE = "BAD_MESSAGE",
@@ -26,6 +27,9 @@ export enum MessageType {
 export interface IdentityMessage {
     readonly type: MessageType.IDENTITY;
     readonly name: string;
+}
+export interface WelcomeMessage {
+    readonly type: MessageType.WELCOME;
 }
 export interface PromotionMessage {
     readonly type: MessageType.PROMOTION;
@@ -102,6 +106,7 @@ export interface EndedMessage {
 
 export type LobbyMessage =
     | IdentityMessage
+    | WelcomeMessage
     | PromotionMessage
     | BadNicknameMessage
     | BadMessageMessage

@@ -57,6 +57,9 @@ const handleMessage = function* (message: LobbyMessage | typeof LobbyConnected |
         case MessageType.BAD_NICKNAME:
             yield* put(ChatState.actions.addLogMessage({ message: message.message, timestamp: new Date() }));
             break;
+        case MessageType.WELCOME:
+            yield* put(UserState.actions.welcome());
+            break;
         case MessageType.CHAT:
             yield* put(
                 ChatState.actions.addLogMessage({

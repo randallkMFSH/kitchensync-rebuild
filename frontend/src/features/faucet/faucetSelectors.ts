@@ -9,6 +9,9 @@ export const selectShouldBePaused = (state: RootState) => state.faucet.paused;
 export const selectLastSeekTarget = (state: RootState) => state.faucet.targetPlaybackPosition;
 export const selectLastPositionUpdateTimestamp = (state: RootState) => state.faucet.lastPositionUpdateTimestamp;
 export const selectShouldShowLoading = (state: RootState): boolean => {
+    if (!state.user.hasBeenWelcomed) {
+        return true;
+    }
     if (isLoading(state.queue.queue)) {
         const previous = getDataOrPrevious(state.queue.queue);
         if (previous && previous.length > 0) {

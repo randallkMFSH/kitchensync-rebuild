@@ -25,6 +25,9 @@
     position: relative;
     background-size: 100%;
     background-position: center;
+    display: flex;
+    align-items: center;
+    justify-content: center;
 }
 .mediaTile.loading {
     background-color: beige;
@@ -38,6 +41,21 @@
     50% {
         opacity: 0.7;
     }
+}
+.mediaTile.noImage.HTML5Audio:before {
+    content: "🎵";
+    font-size: 3rem;
+    justify-self: center;
+    align-self: center;
+    display: inline-block;
+    margin-top: -1rem;
+}
+.mediaTile.noImage.HTML5Video:before {
+    content: "▶";
+    font-size: 3rem;
+    justify-self: center;
+    align-self: center;
+    display: inline-block;
 }
 .mediaTile .deleteMedia {
     position: absolute;

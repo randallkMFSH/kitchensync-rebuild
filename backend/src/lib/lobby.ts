@@ -5,6 +5,7 @@ import { saveChatLog } from "@data/chatLog";
 import { deleteLobby, saveLobby } from "@data/lobby";
 import { getQueueForLobby, saveQueue } from "@data/mediaObjects";
 import { Lobby } from "@models/lobby";
+import fs from "fs";
 import WebSocket from "ws";
 import { RootFaucet } from "./faucet";
 
@@ -42,6 +43,7 @@ export class LobbyInstance {
             this.broadcast({ type: MessageType.PROMOTION, newHost: name });
         }
         this.updateUserlist();
+        this.send(member, { type: MessageType.WELCOME });
 
         this.chat(`${name} has joined the sync`);
     }
@@ -331,6 +333,13 @@ export class LobbyInstance {
 
     async delete() {
         await deleteLobby(this.data.id);
+        for (const media of this.queue) {
+            try {
+                await fs.promises.unlink(`static/thumbnails/${media.guid}.png`);
+            } catch {
+                // We don't care about exceptions here; they're probably that the file doesn't exist.
+            }
+        }
     }
 
     updateUserlist() {
@@ -372,6 +381,10 @@ export class LobbyInstance {
         const oldFirst = this.queue[0];
         this.queue = newQueue;
         if (oldFirst?.guid !== this.queue[0]?.guid) {
+            if (oldFirst?.image_url) {
+                // We don't care about exceptions here; they're probably that the file doesn't exist.
+                fs.promises.unlink(`static/thumbnails/${oldFirst.guid}.png`).catch(() => {});
+            }
             const newTime = this.queue[0]?.start_time || 0;
             this.seek(newTime);
             if (this.host) {
@@ -379,5 +392,7 @@ export class LobbyInstance {
             }
         }
         this.broadcast({ type: MessageType.SET_QUEUE, queue: this.queue });
+
+        this.save();
     }
 }

@@ -1,9 +1,13 @@
 import { MediaObject } from "@common/apiModels";
-import { selectLastPositionUpdateTimestamp, selectLastSeekTarget } from "@features/faucet/faucetSelectors";
+import {
+    selectLastPositionUpdateTimestamp,
+    selectLastSeekTarget,
+    selectShouldBePaused,
+} from "@features/faucet/faucetSelectors";
 import { selectIsCurrentUserHost } from "@features/memberList/memberListSelectors";
 import { getDataOrPrevious, isError, isLoading, isNotRequested } from "@util/LCE";
 import { useAnimationFrame } from "@util/useAnimationFrame";
-import React, { useCallback, useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import "./queue.css";
 import { selectQueue, selectQueueErrorMessage } from "./queueSelectors";
@@ -34,12 +38,21 @@ const DurationIndicator = (props: DurationIndicatorProps) => {
     const duration = props.mediaObject.duration!;
     const lastSeekTarget = useSelector(selectLastSeekTarget);
     const lastUpdateTime = useSelector(selectLastPositionUpdateTimestamp);
+    const shouldBePaused = useSelector(selectShouldBePaused);
     const [currentTime, setCurrentTime] = useState(0);
 
-    useAnimationFrame(() => {
+    useEffect(() => {
         const estimatedCorrectTime = lastSeekTarget + (Date.now() - lastUpdateTime) / 1000;
         setCurrentTime(Math.round(estimatedCorrectTime));
-    }, [lastSeekTarget, lastUpdateTime]);
+    }, []);
+
+    useAnimationFrame(() => {
+        if (shouldBePaused) {
+            return;
+        }
+        const estimatedCorrectTime = lastSeekTarget + (Date.now() - lastUpdateTime) / 1000;
+        setCurrentTime(Math.round(estimatedCorrectTime));
+    }, [lastSeekTarget, lastUpdateTime, shouldBePaused]);
 
     return <progress value={currentTime} max={duration} />;
 };
@@ -74,7 +87,7 @@ const MediaObjectTile = (props: MediaObjectTileProps) => {
         dispatch(QueueState.actions.skipToMedia(mediaObject.guid));
         event.preventDefault();
     }, []);
-    const className = `mediaTile ${mediaObject.faucet_type}`;
+    const className = `mediaTile ${mediaObject.faucet_type} ${mediaObject.image_url ? "hasImage" : "noImage"}`;
     const style = mediaObject.image_url ? { backgroundImage: `url(${mediaObject.image_url})` } : undefined;
     return (
         <li
@@ -91,12 +104,16 @@ const MediaObjectTile = (props: MediaObjectTileProps) => {
                     <button className="deleteMedia" onClick={deleteThisMedia} title="Delete this">
                         🗑
                     </button>
-                    <button className="skipToMedia" onClick={skipToThisMedia} title="Skip to this">
-                        ▶
-                    </button>
+                    {!isCurrentMedia && (
+                        <button className="skipToMedia" onClick={skipToThisMedia} title="Skip to this">
+                            ▶
+                        </button>
+                    )}
                 </>
             )}
-            {isCurrentMedia && mediaObject.duration && <DurationIndicator mediaObject={mediaObject} />}
+            {isCurrentMedia && mediaObject.duration !== undefined && mediaObject.duration !== 0 && (
+                <DurationIndicator mediaObject={mediaObject} />
+            )}
         </li>
     );
 };
