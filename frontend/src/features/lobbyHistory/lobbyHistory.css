@@ -1,0 +1,21 @@
+.history {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    margin-left: auto;
+}
+.history ol {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    flex-direction: row;
+    display: flex;
+}
+.history li {
+    margin-right: 1rem;
+}
+.history h4 {
+    margin-top: 0;
+    margin-bottom: 0.8rem;
+}
