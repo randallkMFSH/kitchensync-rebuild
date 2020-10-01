@@ -1,5 +1,6 @@
 node_modules
 static/build
+static/thumbnails
 dist
 .env
 dump.rdb
