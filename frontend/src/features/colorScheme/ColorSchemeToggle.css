@@ -1,0 +1,7 @@
+.colorSchemeToggle {
+    margin-left: 1rem;
+    width: 3rem;
+    border: 1px solid var(--foreground-color);
+    background-color: transparent;
+    border-radius: 8px;
+}

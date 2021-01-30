@@ -1,3 +1,4 @@
+import { ColorSchemeToggle } from "@features/colorScheme/ColorSchemeToggle";
 import { LobbyHistory } from "@features/lobbyHistory/LobbyHistory";
 import React from "react";
 import "./header.css";
@@ -13,6 +14,7 @@ export const Header = () => {
                     </li>
                 </ul>
             </nav>
+            <ColorSchemeToggle />
             <LobbyHistory />
         </header>
     );

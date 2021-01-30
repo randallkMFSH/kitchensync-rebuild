@@ -1,21 +1,60 @@
+[data-theme="dark"] #app {
+    --acrylic-background-color: rgba(26, 28, 30, 0.95);
+    --foreground-color: rgb(250, 250, 250);
+}
+[data-theme="light"] #app {
+    --acrylic-background-color: #ffffffdd;
+    --foreground-color: black;
+}
+@media (prefers-color-scheme: dark) {
+    #app {
+        --acrylic-background-color: rgba(26, 28, 30, 0.95);
+        --foreground-color: rgb(250, 250, 250);
+    }
+}
+@media (prefers-color-scheme: light) {
+    #app {
+        --acrylic-background-color: #ffffffdd;
+        --foreground-color: black;
+    }
+}
+
 #app {
+    --padding: 4rem;
     display: grid;
     grid-template-areas:
         "header header"
         "faucet memberList"
         "faucet chat";
-    grid-template-columns: 3fr 20rem;
-    grid-template-rows: min-content 50% auto;
+    grid-template-columns: 3fr minmax(20rem, min-content);
+    grid-template-rows: min-content minmax(50%, min-content) auto;
     position: absolute;
     top: 0;
     left: 0;
-    width: 100vw;
-    height: 100vh;
+    width: calc(100vw);
+    height: calc(100vh);
     overflow: hidden;
+    padding: 0 var(--padding) var(--padding) 0;
+    box-sizing: border-box;
+
+    backdrop-filter: blur(16px);
+    background-color: var(--acrylic-background-color);
+    color: var(--foreground-color);
+
+    --primary-color: #6ba79d;
 }
 body {
     margin: 0;
     padding: 0;
+
+    font-family: "Montserrat", "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+    background-repeat: no-repeat;
+    background-size: cover;
+}
+h1,
+h2,
+h3 {
+    font-family: "Comfortaa", "Bahnschrift", "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
 }
 
 @media (max-aspect-ratio: 16/9) {
@@ -25,5 +64,6 @@ body {
             "header header"
             "faucet faucet"
             "memberList chat";
+        --padding: 1rem;
     }
 }

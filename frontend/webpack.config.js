@@ -22,9 +22,9 @@ module.exports = {
                 use: ["style-loader", "css-loader"],
             },
             {
-                test: /\.wav$/i,
+                test: /\.(wav|png|svg|jpg|jpeg|gif)$/i,
                 use: ["file-loader"],
-            },
+            }
         ],
     },
     resolve: {
