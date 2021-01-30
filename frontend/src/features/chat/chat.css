@@ -15,6 +15,9 @@
 }
 .chatInput input {
     flex-grow: 1;
+    border: 1px solid var(--foreground-color);
+    background-color: transparent;
+    color: var(--foreground-color);
 }
 .myUsername {
     grid-area: name;

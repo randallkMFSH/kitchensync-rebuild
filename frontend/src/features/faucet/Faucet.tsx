@@ -91,7 +91,7 @@ export const Faucet = () => {
 
     return (
         <FaucetContext.Provider value={FaucetControl}>
-            <section className="faucet">
+            <section className="faucet sink">
                 {needsInteractionForPlayback && <InteractionPrompt />}
                 <FaucetComponent />
             </section>
