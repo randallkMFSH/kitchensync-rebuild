@@ -7,7 +7,7 @@ import { AsJSON } from "./util/convenienceTypes";
  */
 export const FIELD_SEPARATOR = `\uE001`;
 
-export type FaucetType = "Youtube" | "HTML5Video" | "HTML5Audio";
+export type FaucetType = "Youtube" | "HTML5Video" | "HTML5Audio" | "Twitch";
 
 export interface ChatMessageData {
     readonly sender?: string;
