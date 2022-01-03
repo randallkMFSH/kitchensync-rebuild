@@ -7,7 +7,7 @@ export const rootRouter = new Router();
 
 rootRouter.use("/api", apiRouter.routes(), apiRouter.allowedMethods());
 
-rootRouter.get("/create", async (ctx) => {
+rootRouter.get(["/create", "/"], async (ctx) => {
     const lobby = await createLobby();
     ctx.redirect(lobby.id);
 });
